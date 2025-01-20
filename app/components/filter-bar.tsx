@@ -1,102 +1,47 @@
 "use client";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import {
+  addLetterToFilter,
+  HungarianAlphabet,
+  removeLetterFromFilter,
+} from "@/lib/slices/filterSlice";
 import { cn } from "@/lib/utils";
-import { ChangeEvent, Dispatch, SetStateAction } from "react";
 
-type Filters = {
-  onlyFavorites: boolean;
-  selectedLetter: string | undefined;
-};
+const FilterBar = () => {
+  const selectedLetters = useAppSelector(
+    (state) => state.filter.selectedLetters
+  );
 
-type FiltersProps = {
-  filters: Filters;
-  setFilters: Dispatch<SetStateAction<Filters>>;
-};
+  const dispatch = useAppDispatch();
 
-const FilterBar = ({ filters, setFilters }: FiltersProps) => {
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setFilters((prev) => ({ ...prev, onlyFavorites: event.target.checked }));
+  const handleSelectLetter = (letter: HungarianAlphabet) => {
+    if (selectedLetters.includes(letter)) {
+      dispatch(removeLetterFromFilter(letter));
+    } else {
+      dispatch(addLetterToFilter(letter));
+    }
   };
-
-  const handleSelectLetter = (letter: string) => {
-    setFilters((prev) => ({
-      ...prev,
-      selectedLetter: prev.selectedLetter === letter ? undefined : letter,
-    }));
-  };
-
-  const hungarianAlphabet = [
-    "A",
-    "Á",
-    "B",
-    "C",
-    "Cs",
-    "D",
-    "Dz",
-    "Dzs",
-    "E",
-    "É",
-    "F",
-    "G",
-    "Gy",
-    "H",
-    "I",
-    "Í",
-    "J",
-    "K",
-    "L",
-    "Ly",
-    "M",
-    "N",
-    "Ny",
-    "O",
-    "Ó",
-    "Ö",
-    "Ő",
-    "P",
-    "Q",
-    "R",
-    "S",
-    "Sz",
-    "T",
-    "Ty",
-    "U",
-    "Ú",
-    "Ü",
-    "Ű",
-    "V",
-    "W",
-    "X",
-    "Y",
-    "Z",
-    "Zs",
-  ];
 
   return (
     <div>
       <div className="flex gap-2">
-        {hungarianAlphabet.map((letter) => {
+        {Object.values(HungarianAlphabet).map((letter) => {
           return (
             <button
               className={cn(
-                "bg-gray-200 text-gray-800 p-2 rounded-xl cursor-pointer hover:bg-gray-400 hover:text-gray-900",
-                filters.selectedLetter === letter
-                  ? "border-gray-800 border-2 rounded-xl p-2 bg-gray-400"
+                "bg-gray-200 text-gray-800 p-2 rounded-xl cursor-pointer hover:border border-black",
+                selectedLetters.includes(letter as HungarianAlphabet)
+                  ? "bg-blue-200 text-blue-800"
                   : ""
               )}
               key={letter}
-              onClick={() => handleSelectLetter(letter)}
+              onClick={() => handleSelectLetter(letter as HungarianAlphabet)}
             >
               {letter}
             </button>
           );
         })}
       </div>
-      <fieldset>
-        <div>
-          <input type="checkbox" placeholder="Search" onChange={handleChange} />
-          <label>Only favorites</label>
-        </div>
-      </fieldset>
     </div>
   );
 };

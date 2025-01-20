@@ -1,7 +1,8 @@
 "use client";
 
 import Filter from "@/app/components/filter-bar";
-import { GivenNamesList } from "@/app/components/given-names-list";
+import { GivenNamesColumn } from "@/app/components/given-names/given-names-column";
+import { useAppSelector } from "@/lib/hooks";
 import { useState } from "react";
 
 type GivenName = {
@@ -25,53 +26,42 @@ type TGivenNamesProps = {
   };
 };
 
-type Filters = {
-  onlyFavorites: boolean;
-  selectedLetter: string | undefined;
-};
-
 const GivenNamesSection = ({
   favoriteGivenNames,
   dislikedGivenNames,
   givenNames,
 }: TGivenNamesProps) => {
-  const [filters, setFilters] = useState<Filters>({
-    onlyFavorites: false,
-    selectedLetter: undefined,
-  });
   const [favorites, setFavorites] = useState(favoriteGivenNames);
   const [disliked, setDisliked] = useState(dislikedGivenNames);
 
+  const filters = useAppSelector((state) => state.filter);
+
+  const getFilteredList = (givenNames: GivenName[]) => {
+    return givenNames.filter(() => {
+      return !filters.onlyFavorites;
+    });
+  };
+
   return (
     <div className="flex flex-col gap-8">
-      <Filter filters={filters} setFilters={setFilters} />
+      <Filter />
       <section className="flex flex-row gap-8">
         {givenNames.male && (
-          <GivenNamesList
+          <GivenNamesColumn
             favorites={favorites}
             setFavorites={setFavorites}
             disliked={disliked}
             setDisliked={setDisliked}
-            givenNames={givenNames.male.filter(
-              (name) =>
-                !filters.onlyFavorites ||
-                favorites.some((favorite) => favorite.givenNameId === name.id)
-            )}
-            filters={filters}
+            givenNames={getFilteredList(givenNames.male)}
           />
         )}
         {givenNames.female && (
-          <GivenNamesList
+          <GivenNamesColumn
             favorites={favorites}
             setFavorites={setFavorites}
             disliked={disliked}
             setDisliked={setDisliked}
-            givenNames={givenNames.female.filter(
-              (name) =>
-                !filters.onlyFavorites ||
-                favorites.some((favorite) => favorite.givenNameId === name.id)
-            )}
-            filters={filters}
+            givenNames={getFilteredList(givenNames.female)}
           />
         )}
       </section>

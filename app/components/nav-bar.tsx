@@ -9,8 +9,6 @@ const NavBar = () => {
   const session = useSession();
   const pathname = usePathname();
 
-  console.log(pathname);
-
   return (
     <div className="flex justify-between p-4">
       <ul>

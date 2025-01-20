@@ -1,0 +1,106 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// prisma/schema.prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // uncomment next line if you use Prisma <5.10
+  // directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  // sessions          Session[]
+  // Optional for WebAuthn support
+  // Authenticator     Authenticator[]
+
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  UserGivenName   UserGivenName[]
+  friendsSent     Friend[]        @relation("sentFriends")
+  friendsReceived Friend[]        @relation("receivedFriends")
+  role            Role            @default(USER)
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model GivenName {
+  id            String          @id @default(cuid())
+  name          String
+  gender        String
+  UserGivenName UserGivenName[]
+}
+
+model UserGivenName {
+  userId      String
+  givenNameId String
+  status      GivenNameStatus @default(NEUTRAL)
+
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  givenName GivenName @relation(fields: [givenNameId], references: [id], onDelete: Cascade)
+
+  @@id([userId, givenNameId])
+}
+
+model Friend {
+  id         String       @id @default(cuid())
+  senderId   String
+  receiverId String
+  status     FriendStatus @default(PENDING)
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  sender   User @relation("sentFriends", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver User @relation("receivedFriends", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@unique([senderId, receiverId]) // Egyedi kapcsolat két felhasználó között
+}
+
+enum FriendStatus {
+  PENDING // Barátkérés elküldve
+  ACCEPTED // Barátság elfogadva
+  REJECTED // Barátság elutasítva
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum GivenNameStatus {
+  LIKE
+  DISLIKE
+  NEUTRAL
+}

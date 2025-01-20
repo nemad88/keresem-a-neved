@@ -5,19 +5,19 @@ import {
   getDislikedGivenNames,
   getFavoriteGivenNames,
 } from "@/data/userGivenName";
-import Friends from "./components/friends-section";
-import GivenNamesSection from "./components/given-names-section";
+import GivenNamesSection from "./components/given-names/given-names-section";
+import Friends from "./components/mutual-favorites/friends-section";
 
 export default async function Home() {
   const session = await auth();
+
+  console.log("session", session);
+
   const femaleGivenNames = await getGivenNames("female");
   const maleGivenNames = await getGivenNames("male");
   const favoriteGivenNames = await getFavoriteGivenNames();
   const dislikedGivenNames = await getDislikedGivenNames();
-  const friends = await getFriends(session?.user.id);
-
-  console.log("female", JSON.stringify(femaleGivenNames));
-  console.log("male", maleGivenNames?.length);
+  const friends = await getFriends(session?.user.userId);
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
