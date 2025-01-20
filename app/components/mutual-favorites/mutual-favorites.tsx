@@ -23,19 +23,18 @@ const MutualFavorites = ({
 
   const getFriends = async () => {
     const friends = await refetchFriends();
-    console.log("get friends", friends);
     setMutualFavoriteGivenNames(friends);
   };
 
   return (
-    <div>
-      <div className="flex flex-row justify-between items-center gap-2">
-        <h1 className="text-2xl font-bold">Mutual favorite names</h1>
+    <div className="flex flex-col gap-8">
+      <GivenNamesList givenNames={mutualFavoriteGivenNames} listType="mutual" />
+      <div className="flex justify-center text-sm">
         <button onClick={getFriends} className="flex items-center text-2xl">
+          Refresh friends
           <IoRefresh />
         </button>
       </div>
-      <GivenNamesList givenNames={mutualFavoriteGivenNames} listType="mutual" />
     </div>
   );
 };

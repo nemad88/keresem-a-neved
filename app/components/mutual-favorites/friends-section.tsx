@@ -28,17 +28,23 @@ const FriendsSection = async ({ friends }: { friends: Friends }) => {
     return mutual;
   };
 
-  console.log("friends", friends);
+  if (friends.length === 0) {
+    return null;
+  }
 
   return (
-    <>
+    <div className="w-full flex flex-col gap-8">
       {friends.map((friend, index) => (
-        <div key={friend.id}>
-          <h1>
-            {friend.senderId === session?.user.userId
-              ? friend.receiver.name
-              : friend.sender.name}
+        <div className="flex flex-col gap-8 flex-1" key={friend.id}>
+          <h1 className="text-2xl font-bold">
+            Mutual favorite names with{" "}
+            <span className="underline">
+              {friend.senderId === session?.user.userId
+                ? friend.receiver.name
+                : friend.sender.name}
+            </span>
           </h1>
+
           <MutualFavorites
             mutualFavoriteGivenNamesProp={mutuals[index]}
             refetchFriends={refetchFriends.bind(
@@ -49,7 +55,7 @@ const FriendsSection = async ({ friends }: { friends: Friends }) => {
           />
         </div>
       ))}
-    </>
+    </div>
   );
 };
 

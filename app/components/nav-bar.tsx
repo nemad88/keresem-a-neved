@@ -9,8 +9,18 @@ const NavBar = () => {
   const session = useSession();
   const pathname = usePathname();
 
+  if (session.status === "loading") {
+    return (
+      <div className="h-10 flex justify-between p-4">
+        <div className="h-10 w-20 bg-gray-100 animate-pulse rounded-3xl"></div>
+        <div className="h-10 w-20 bg-gray-100 animate-pulse rounded-3xl"></div>
+        <div className="h-10 w-20 bg-gray-100 animate-pulse rounded-3xl"></div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex justify-between p-4">
+    <div className="h-10 flex justify-between p-4">
       <ul>
         <RoleGate allowedRole={"ADMIN"}>
           <Link href={pathname === "/admin" ? "/" : "/admin"}>
