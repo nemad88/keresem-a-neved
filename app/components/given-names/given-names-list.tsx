@@ -14,12 +14,12 @@ const GivenNamesList = ({
   listType: "normal" | "favorites" | "disliked" | "mutual";
 }) => {
   return (
-    <ul className="flex flex-row gap-2 flex-wrap ">
+    <ul className="flex flex-col gap-2 flex-wrap text-4xl">
       {givenNames.map((name) => (
         <li
           key={name.id}
           className={cn(
-            "bg-slate-50 rounded-2xl gap-2 p-1 relative overflow-hidden	"
+            "bg-slate-50 rounded-2xl gap-8 p-1 relative overflow-hidden flex-1"
           )}
         >
           <div
@@ -32,23 +32,23 @@ const GivenNamesList = ({
             )}
           ></div>
 
-          <div className="relative flex flex-row gap-2 justify-center items-center bg-white p-2  rounded-2xl">
+          <div className="relative flex flex-row gap-2 justify-between items-center bg-white p-2  rounded-2xl">
             <div>{name.name}</div>
-            <div className={cn("flex gap-2 items-center")}>
-              {handleClickFavorite && (
-                <div
-                  className={cn("flex items-center")}
-                  onClick={() => handleClickFavorite(name.id)}
-                >
-                  <IoHeartOutline />
-                </div>
-              )}
+            <div className={cn("flex gap-8 items-center text-5xl")}>
               {handleClickDislike && (
                 <div
                   className={cn()}
                   onClick={() => handleClickDislike(name.id)}
                 >
                   <IoHeartDislikeOutline />
+                </div>
+              )}
+              {handleClickFavorite && (
+                <div
+                  className={cn("flex items-center")}
+                  onClick={() => handleClickFavorite(name.id)}
+                >
+                  <IoHeartOutline />
                 </div>
               )}
             </div>

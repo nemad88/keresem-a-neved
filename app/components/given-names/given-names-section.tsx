@@ -45,16 +45,7 @@ const GivenNamesSection = ({
   return (
     <div className="flex flex-col gap-8">
       <Filter />
-      <section className="flex flex-row gap-8">
-        {givenNames.male && (
-          <GivenNamesColumn
-            favorites={favorites}
-            setFavorites={setFavorites}
-            disliked={disliked}
-            setDisliked={setDisliked}
-            givenNames={getFilteredList(givenNames.male)}
-          />
-        )}
+      <section className="flex flex-col lg:flex-row gap-8">
         {givenNames.female && (
           <GivenNamesColumn
             favorites={favorites}
@@ -62,6 +53,15 @@ const GivenNamesSection = ({
             disliked={disliked}
             setDisliked={setDisliked}
             givenNames={getFilteredList(givenNames.female)}
+          />
+        )}
+        {givenNames.male && (
+          <GivenNamesColumn
+            favorites={favorites}
+            setFavorites={setFavorites}
+            disliked={disliked}
+            setDisliked={setDisliked}
+            givenNames={getFilteredList(givenNames.male)}
           />
         )}
       </section>

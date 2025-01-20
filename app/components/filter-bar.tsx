@@ -23,8 +23,8 @@ const FilterBar = () => {
   };
 
   return (
-    <div>
-      <div className="flex gap-2">
+    <div className="w-full">
+      <div className="flex flex-wrap gap-2">
         {Object.values(HungarianAlphabet).map((letter) => {
           return (
             <button
