@@ -131,11 +131,15 @@ export function GivenNamesColumn({
       </h1>
       <GivenNamesList
         listType="normal"
-        givenNames={givenNames.filter((name) => {
-          return !favorites.some(
-            (favorite) => favorite.givenNameId === name.id
-          );
-        })}
+        givenNames={givenNames
+          .filter((name) => {
+            return !favorites.some(
+              (favorite) => favorite.givenNameId === name.id
+            );
+          })
+          .filter((name) => {
+            return !disliked.some((dislike) => dislike.givenNameId === name.id);
+          })}
         handleClickDislike={handleClickDislike}
         handleClickFavorite={handleClickFavorite}
       />

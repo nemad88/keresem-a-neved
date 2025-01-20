@@ -1,6 +1,5 @@
 "use client";
 
-import Filter from "@/app/components/filter-bar";
 import { GivenNamesColumn } from "@/app/components/given-names/given-names-column";
 import { useAppSelector } from "@/lib/hooks";
 import { useState } from "react";
@@ -43,8 +42,8 @@ const GivenNamesSection = ({
   };
 
   return (
-    <div className="flex flex-col gap-8">
-      <Filter />
+    <div className="w-full flex flex-col gap-8">
+      {/* <Filter /> */}
       <section className="flex flex-col lg:flex-row gap-8">
         {givenNames.female && (
           <GivenNamesColumn
@@ -55,7 +54,7 @@ const GivenNamesSection = ({
             givenNames={getFilteredList(givenNames.female)}
           />
         )}
-        {givenNames.male && (
+        {/* {givenNames.male && (
           <GivenNamesColumn
             favorites={favorites}
             setFavorites={setFavorites}
@@ -63,7 +62,7 @@ const GivenNamesSection = ({
             setDisliked={setDisliked}
             givenNames={getFilteredList(givenNames.male)}
           />
-        )}
+        )} */}
       </section>
     </div>
   );
