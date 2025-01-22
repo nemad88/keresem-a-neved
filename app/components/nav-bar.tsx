@@ -20,7 +20,7 @@ const NavBar = () => {
   }
 
   return (
-    <div className="h-10 flex justify-between p-4">
+    <div className="h-auto w-full bg-slate-100 left-0 top-0 flex justify-between p-4 fixed z-50 items-center">
       <ul>
         <RoleGate allowedRole={"ADMIN"}>
           <Link href={pathname === "/admin" ? "/" : "/admin"}>
@@ -30,9 +30,21 @@ const NavBar = () => {
           </Link>
         </RoleGate>
       </ul>
-      <div>{session ? session.data?.user.name?.split(" ")[0] : ""}</div>
+      <div className="flex gap-8 justify-center items-center">
+        <Link href={"#male"} className="cursor-pointer underline">
+          Boys
+        </Link>
+        <div className="text-2xl">
+          {session ? session.data?.user.name?.split(" ")[0] : ""}
+        </div>
+        <Link href={"#female"} className="cursor-pointer underline">
+          Girls
+        </Link>
+      </div>
       {session.data ? (
-        <button onClick={() => signOut()}>Logout</button>
+        <button className="underline" onClick={() => signOut()}>
+          Logout
+        </button>
       ) : (
         <form
           action={async () => {

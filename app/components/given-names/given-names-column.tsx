@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils";
 import { GivenNameStatus } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { Dispatch, SetStateAction, useState } from "react";
-import { IoCaretDown, IoCaretUp } from "react-icons/io5";
 import GivenNamesList from "./given-names-list";
 
 type GivenName = {
@@ -21,6 +20,7 @@ type FavoriteGivenName = {
 };
 
 type TGivenNamesProps = {
+  id: string;
   favorites: FavoriteGivenName[];
   disliked: FavoriteGivenName[];
   setFavorites?: Dispatch<SetStateAction<FavoriteGivenName[]>>;
@@ -29,6 +29,7 @@ type TGivenNamesProps = {
 };
 
 export function GivenNamesColumn({
+  id,
   favorites,
   setFavorites,
   disliked,
@@ -36,9 +37,7 @@ export function GivenNamesColumn({
   givenNames,
 }: TGivenNamesProps) {
   const session = useSession();
-
   const [showHidden, setShowHidden] = useState(false);
-  const [closed, setClosed] = useState(false);
 
   const isFavorite = (givenNameId: string) => {
     return favorites?.some((favorite) => favorite.givenNameId === givenNameId);
@@ -93,20 +92,30 @@ export function GivenNamesColumn({
   };
 
   return (
-    <div className={cn("flex-1 relative")}>
-      {closed ? (
-        <IoCaretDown
-          className="absolute top-0 right-0"
-          onClick={() => setClosed((prev) => !prev)}
+    <div className={cn("flex-1 relative")} id={id}>
+      <div className="flex justify-start items-center gap-2">
+        <input
+          type="checkbox"
+          name="show-hidden"
+          checked={showHidden}
+          onChange={() => setShowHidden(!showHidden)}
         />
-      ) : (
-        <IoCaretUp
-          onClick={() => setClosed((prev) => !prev)}
-          className="absolute top-0 right-0"
+        <label>Show hidden</label>
+      </div>
+
+      {showHidden && (
+        <GivenNamesList
+          listType="disliked"
+          givenNames={givenNames.filter((name) => {
+            return favorites.some(
+              (favorite) => favorite.givenNameId === name.id
+            );
+          })}
+          handleClickDislike={handleClickDislike}
+          handleClickFavorite={handleClickFavorite}
+          title={`Disliked ${givenNames[0]?.gender === "female" ? "girl" : "boy"} names`}
         />
       )}
-      <div>Number of names: {givenNames?.length}</div>
-      <h1 className="text-2xl font-bold">Favorites</h1>
       <GivenNamesList
         listType="favorites"
         givenNames={givenNames.filter((name) => {
@@ -114,21 +123,8 @@ export function GivenNamesColumn({
         })}
         handleClickDislike={handleClickDislike}
         handleClickFavorite={handleClickFavorite}
+        title={`Favorite ${givenNames[0]?.gender === "female" ? "girl" : "boy"} names`}
       />
-      {setFavorites && (
-        <>
-          <input
-            type="checkbox"
-            name="show-hidden"
-            checked={showHidden}
-            onChange={() => setShowHidden(!showHidden)}
-          />
-          <label>Show hidden</label>
-        </>
-      )}
-      <h1 className="text-2xl font-bold">
-        All {givenNames[0]?.gender} given names
-      </h1>
       <GivenNamesList
         listType="normal"
         givenNames={givenNames
@@ -142,6 +138,7 @@ export function GivenNamesColumn({
           })}
         handleClickDislike={handleClickDislike}
         handleClickFavorite={handleClickFavorite}
+        title={`All ${givenNames[0]?.gender} given names`}
       />
     </div>
   );

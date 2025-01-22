@@ -40,16 +40,15 @@ const FriendsSection = async ({ friends }: { friends: Friends }) => {
         }
         return (
           <div className="flex flex-col gap-8 flex-1" key={friend.id}>
-            <h1 className="text-2xl font-bold">
-              Mutual favorite names with{" "}
-              <span className="underline">
-                {friend.senderId === session?.user.userId
-                  ? friend.receiver.name
-                  : friend.sender.name}
-              </span>
-            </h1>
+            <h1 className="text-2xl font-bold"></h1>
 
             <MutualFavorites
+              title={`Mutual favorite names with 
+              ${
+                friend.senderId === session?.user.userId
+                  ? friend.receiver.name
+                  : friend.sender.name
+              }`}
               mutualFavoriteGivenNamesProp={mutuals[index]}
               refetchFriends={refetchFriends.bind(
                 null,

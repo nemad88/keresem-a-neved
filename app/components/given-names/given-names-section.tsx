@@ -45,24 +45,30 @@ const GivenNamesSection = ({
     <div className="w-full flex flex-col gap-8">
       {/* <Filter /> */}
       <section className="flex flex-col lg:flex-row gap-8">
-        {givenNames.female && (
-          <GivenNamesColumn
-            favorites={favorites}
-            setFavorites={setFavorites}
-            disliked={disliked}
-            setDisliked={setDisliked}
-            givenNames={getFilteredList(givenNames.female)}
-          />
+        <div className="bg-pink-200/50 p-8 rounded-2xl flex-1">
+          {givenNames.female && (
+            <GivenNamesColumn
+              id={"female"}
+              favorites={favorites}
+              setFavorites={setFavorites}
+              disliked={disliked}
+              setDisliked={setDisliked}
+              givenNames={getFilteredList(givenNames.female)}
+            />
+          )}
+        </div>
+        {givenNames.male && (
+          <div className="bg-blue-200/50 p-8 rounded-2xl flex-1">
+            <GivenNamesColumn
+              id={"male"}
+              favorites={favorites}
+              setFavorites={setFavorites}
+              disliked={disliked}
+              setDisliked={setDisliked}
+              givenNames={getFilteredList(givenNames.male)}
+            />
+          </div>
         )}
-        {/* {givenNames.male && (
-          <GivenNamesColumn
-            favorites={favorites}
-            setFavorites={setFavorites}
-            disliked={disliked}
-            setDisliked={setDisliked}
-            givenNames={getFilteredList(givenNames.male)}
-          />
-        )} */}
       </section>
     </div>
   );
